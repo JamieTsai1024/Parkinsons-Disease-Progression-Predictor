@@ -3,6 +3,7 @@ import tensorflow as tf
 import tensorflow.keras.backend as K
 from tensorflow import keras
 from sklearn.model_selection import train_test_split
+from tensorflow.keras.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error, mean_squared_logarithmic_error
 from determined.keras import InputData, TFKerasTrial, TFKerasTrialContext
 
 class ParkinsonsDisease(TFKerasTrial):
@@ -58,6 +59,7 @@ class ParkinsonsDisease(TFKerasTrial):
         model.compile(
             optimizer=optimizer,
             loss=smape_loss,
+            metrics=[mean_squared_error, mean_absolute_error, mean_absolute_percentage_error, mean_squared_logarithmic_error]
         )
         
         return model
