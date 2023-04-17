@@ -5,6 +5,9 @@ data:
   peptides: "./dataset/train_peptides.csv"
 hyperparameters:
   global_batch_size: 32
+  learning_rate: 0.0001
+  topk_pooling_ratio: 0.8
+  dropout: 0.5
 records_per_epoch: 60000
 searcher:
   name: single
