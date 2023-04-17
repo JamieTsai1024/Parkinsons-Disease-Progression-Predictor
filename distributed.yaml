@@ -1,0 +1,17 @@
+name: parkinsons_tf_keras_distributed
+data: 
+  clinical: "./dataset/train_clinical_data.csv"
+  proteins: "./dataset/train_proteins.csv"
+  peptides: "./dataset/train_peptides.csv"
+hyperparameters:
+  global_batch_size: 256
+resources:
+  slots_per_trial: 8
+records_per_epoch: 60000
+searcher:
+  name: single
+  metric: val_loss
+  smaller_is_better: true 
+  max_length:
+    epochs: 5
+entrypoint: model_def:ParkinsonsDisease
