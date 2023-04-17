@@ -44,13 +44,9 @@ class ParkinsonsDisease(TFKerasTrial):
         # sMAPE Loss Function
         def smape_loss(y_true, y_pred):
             epsilon = 0.1
-            print("y_true y_pred smape")
-            tf.print(y_true)
-            tf.print(y_pred) 
             summ = K.maximum(K.abs(y_true) + K.abs(y_pred) + epsilon, 0.5 + epsilon)
             smape = K.abs(y_pred - y_true) / summ * 2
             smape = tf.where(tf.math.is_nan(smape), tf.zeros_like(smape), smape)
-            tf.print(smape)
             return smape
 
         # Compile Model 
