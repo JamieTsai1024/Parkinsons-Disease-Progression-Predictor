@@ -1,9 +1,11 @@
 import pandas as pd
+import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.pipeline import make_pipeline
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
+from sklearn.feature_selection import SelectKBest, f_regression
 
 def load_dataset(data_path):
 
@@ -16,32 +18,18 @@ def load_dataset(data_path):
     # Target Preparation 
 
     patients = {}
-    month_windows = [0, 6, 12, 24]
+    df_clinical[f'updrs_3_plus_12_months'] = 0
 
-    for e in range(1,5):
-        for m in month_windows:
-            df_clinical[f'updrs_{e}_plus_{m}_months'] = 0
-
-    for patient in df_clinical.patient_id.unique():
-        temp = df_clinical[df_clinical.patient_id == patient]
-        month_list = []
-
-        for month in temp.visit_month.values:
-            month_list.append([month, month + 6, month + 12, month + 24])
-
-        for month in range(len(month_list)):
-            for x in range(1,5):
-                arr = temp[temp.visit_month.isin(month_list[month])][f'updrs_{x}'].fillna(0).to_list()
-                if len(arr) == 4:
-                    for e, i in enumerate(arr):
-                        m = month_list[month][0]
-                        temp.loc[temp.visit_month == m, [f'updrs_{x}_plus_{month_windows[e]}_months']] = i
-                else:
-                    temp = temp[~temp.visit_month.isin(month_list[month])]
-
-        patients[patient] = temp
+    for patient_id in df_clinical.patient_id.unique():
+        patient = df_clinical[df_clinical.patient_id == patient_id]
+        for month in patient.visit_month.values:
+            future_score = patient[patient.visit_month == month + 12][f'updrs_3'].to_list() 
+            if (future_score == []): future_score = np.NaN
+            patient.loc[patient.visit_month == (month), ['updrs_3_plus_12_months']] = future_score
+        patients[patient_id] = patient
 
     clinical_features = pd.concat(patients.values(), ignore_index=True).set_index('visit_id').iloc[:,7:]
+    clinical_features.dropna(inplace=True)
 
     # Feature Preparation
     
@@ -71,12 +59,12 @@ def load_dataset(data_path):
     feature_transformer = ColumnTransformer([
         (
             'numerical',
-            make_pipeline(IterativeImputer(), StandardScaler()),
+            make_pipeline(IterativeImputer(), StandardScaler(), SelectKBest(score_func=f_regression, k=10)),
             make_column_selector(dtype_include='number')
         ),
     ])
 
-    x = feature_transformer.fit_transform(x)
+    x = feature_transformer.fit_transform(x, y.values.ravel())
     y = y.to_numpy()
 
     # Return Features and Target 
