@@ -18,14 +18,14 @@ def load_dataset(data_path):
     # Target Preparation 
 
     patients = {}
-    df_clinical[f'updrs_3_plus_12_months'] = 0
+    df_clinical[f'updrs_3_next_year'] = 0
 
     for patient_id in df_clinical.patient_id.unique():
         patient = df_clinical[df_clinical.patient_id == patient_id]
         for month in patient.visit_month.values:
             future_score = patient[patient.visit_month == month + 12][f'updrs_3'].to_list() 
             if (future_score == []): future_score = np.NaN
-            patient.loc[patient.visit_month == (month), ['updrs_3_plus_12_months']] = future_score
+            patient.loc[patient.visit_month == (month), ['updrs_3_next_year']] = future_score
         patients[patient_id] = patient
 
     clinical_features = pd.concat(patients.values(), ignore_index=True).set_index('visit_id').iloc[:,7:]
@@ -38,10 +38,9 @@ def load_dataset(data_path):
 
     # Merge Features and Target 
 
-    # df = clinical_features \
-    #     .merge(protein_features, left_index=True, right_index=True, how='left') \
-    #     .merge(peptide_features, left_index=True, right_index=True, how='left')    
-    df = protein_features.merge(clinical_features, left_index=True, right_index=True, how='right')
+    df = clinical_features \
+        .merge(protein_features, left_index=True, right_index=True, how='left') \
+        .merge(peptide_features, left_index=True, right_index=True, how='left')    
 
     df['visit_month'] = df.reset_index().visit_id.str.split('_').apply(lambda x: int(x[1])).values
     protein_list = protein_features.columns.to_list()
@@ -49,7 +48,6 @@ def load_dataset(data_path):
     
     # Transform Features and Target 
 
-    # x = df[protein_list + peptide_list + ["visit_month"]]
     x = df[protein_list + ["visit_month"]]
     y = df[clinical_features.columns]
 
