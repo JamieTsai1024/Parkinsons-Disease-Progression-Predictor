@@ -11,8 +11,11 @@ Our goal is to predict the progression of [Parkinson's disease](https://www.nia.
 Using protein abundance data, our model predicts the severity of the symptoms a patient will face in a year. The severity of a patient's condition is measured through [MSD-UPDR](https://www.parkinsons.org.uk/professionals/resources/mds-unified-parkinsons-disease-rating-scale-mds-updrs) scores, which assess both motor and non-motor symptoms associated with Parkinson's. We chose to focus on one of these scores: UPDRS 3, which measures motor symptoms including speech, facial expression, and hand movement.
 
 ### Data Sample
+![Figure 1](./images/Figure%201.png "Example X dataset")
+![Figure 2](./images/Figure%202.png "Example y dataset")
 
-<!-- TODO -->
+Figure 1: This represents the distribution of the 50 features chosen using SelectKBest feature selection, after scaling and transforming.
+Figure 2: Shows the expected score for UPDRS, after 12 months from the visit_id index.
 
 ### Getting Started 
 
@@ -44,9 +47,8 @@ We used the symmetric mean absolute percentage error (sMAPE) metric to evaluate 
 
 ### Best Metrics 
 
-Using sMAPE, our model achieved a validation loss of <!-- TODO: insert best metric -->
-
-<!-- TODO: insert screenshot of best metrics from Determined web UI -->
+Using sMAPE, our model achieved a validation loss of 0.741316.
+![Best Metrics](./images/loss.png "Loss and validation loss")
 
 ### Reproducing Results  
 
