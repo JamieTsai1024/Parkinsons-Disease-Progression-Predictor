@@ -59,7 +59,7 @@ def load_dataset(data_path):
     feature_transformer = ColumnTransformer([
         (
             'numerical',
-            make_pipeline(IterativeImputer(), StandardScaler(), SelectKBest(score_func=f_regression, k=10)),
+            make_pipeline(IterativeImputer(), StandardScaler(), SelectKBest(score_func=f_regression, k=50)),
             make_column_selector(dtype_include='number')
         ),
     ])

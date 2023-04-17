@@ -11,5 +11,5 @@ searcher:
   metric: val_loss
   smaller_is_better: true
   max_length:
-    epochs: 2
+    epochs: 20
 entrypoint: model_def:ParkinsonsDisease

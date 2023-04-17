@@ -3,8 +3,9 @@ import tensorflow as tf
 import tensorflow.keras.backend as K
 from tensorflow import keras
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error, mean_squared_logarithmic_error
+from tensorflow.keras.metrics import mean_squared_error
 from determined.keras import InputData, TFKerasTrial, TFKerasTrialContext
+from tensorflow.keras.regularizers import L2
 
 class ParkinsonsDisease(TFKerasTrial):
     def __init__(self, context: TFKerasTrialContext) -> None:
@@ -23,18 +24,12 @@ class ParkinsonsDisease(TFKerasTrial):
         # Define Model 
         model = keras.Sequential(
             [
-                keras.layers.Dense(256, input_shape = [self.input_shape], activation = 'relu'),
-                keras.layers.Dropout(0.6),
-                keras.layers.Dense(256, activation = 'relu'),
-                keras.layers.Dropout(0.6),
-                keras.layers.Dense(150, activation = 'relu'),
-                keras.layers.Dropout(0.6),
-                keras.layers.Dense(150, activation = 'relu'),
-                keras.layers.Dropout(0.6),
-                keras.layers.Dense(128, activation = 'relu'),
-                keras.layers.Dropout(0.6),
-                keras.layers.Dense(128, activation = 'relu'),
-                keras.layers.Dropout(0.6),
+                keras.layers.Dense(128, input_shape = [self.input_shape], activation = 'relu', kernel_regularizer=L2(0.01)),
+                keras.layers.Dropout(0.8),
+                keras.layers.Dense(64, activation = 'relu', kernel_regularizer=L2(0.001)),
+                keras.layers.Dropout(0.4),
+                keras.layers.Dense(32, activation = 'relu', kernel_regularizer=L2(0.001)),
+                keras.layers.Dropout(0.4),
                 keras.layers.Dense(self.output_shape),
             ]
         )
@@ -49,16 +44,20 @@ class ParkinsonsDisease(TFKerasTrial):
         # sMAPE Loss Function
         def smape_loss(y_true, y_pred):
             epsilon = 0.1
+            print("y_true y_pred smape")
+            tf.print(y_true)
+            tf.print(y_pred) 
             summ = K.maximum(K.abs(y_true) + K.abs(y_pred) + epsilon, 0.5 + epsilon)
             smape = K.abs(y_pred - y_true) / summ * 2
             smape = tf.where(tf.math.is_nan(smape), tf.zeros_like(smape), smape)
+            tf.print(smape)
             return smape
 
         # Compile Model 
         model.compile(
             optimizer=optimizer,
             loss=smape_loss,
-            metrics=[mean_squared_error, mean_absolute_error, mean_absolute_percentage_error, mean_squared_logarithmic_error]
+            metrics=[mean_squared_error]
         )
         
         return model
