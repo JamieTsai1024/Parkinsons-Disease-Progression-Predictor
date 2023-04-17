@@ -8,7 +8,7 @@ We used [Determined Cloud](https://det-cloud.com/) to run our models and the [AM
 
 Our goal is to predict the progression of [Parkinson's disease](https://www.nia.nih.gov/health/parkinsons-disease) in patients.
 
-Using protein abundance data, our model predicts the severity of Parkinson's disease for a patient at a certain time. The severity of a patient's condition is measured through [MSD-UPDR](https://www.parkinsons.org.uk/professionals/resources/mds-unified-parkinsons-disease-rating-scale-mds-updrs) scores, which assess both motor and non-motor symptoms associated with Parkinson's.
+Using protein abundance data, our model predicts the severity of the symptoms a patient will face in a year. The severity of a patient's condition is measured through [MSD-UPDR](https://www.parkinsons.org.uk/professionals/resources/mds-unified-parkinsons-disease-rating-scale-mds-updrs) scores, which assess both motor and non-motor symptoms associated with Parkinson's. We chose to focus on one of these scores: UPDRS 3, which measures motor symptoms including speech, facial expression, and hand movement.
 
 ### Data Sample
 
