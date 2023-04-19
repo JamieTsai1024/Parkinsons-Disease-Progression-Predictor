@@ -1,6 +1,6 @@
 # Parkinson's Disease Progression Predictor 🧠
 
-This project was submitted to [Determined AI's 2023 hackathon](https://determined-ai.devpost.com/). Check out our submission on [Devpost]()! 
+This project was submitted to [Determined AI's 2023 hackathon](https://determined-ai.devpost.com/). Check out our submission on [Devpost](https://devpost.com/software/parkinson-s-disease-progression-predictor)! 
 
 We used [Determined Cloud](https://det-cloud.com/) to run our models and the [AMP®-Parkinson's Disease Progression Prediction](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/data) database from Kaggle.
 
@@ -8,14 +8,20 @@ We used [Determined Cloud](https://det-cloud.com/) to run our models and the [AM
 
 Our goal is to predict the progression of [Parkinson's disease](https://www.nia.nih.gov/health/parkinsons-disease) in patients.
 
-Using protein abundance data, our model predicts the severity of the symptoms a patient will face in a year. The severity of a patient's condition is measured through [MSD-UPDR](https://www.parkinsons.org.uk/professionals/resources/mds-unified-parkinsons-disease-rating-scale-mds-updrs) scores, which assess both motor and non-motor symptoms associated with Parkinson's. We chose to focus on one of these scores: UPDRS 3, which measures motor symptoms including speech, facial expression, and hand movement.
+Using protein abundance data, our model predicts the severity of the symptoms a patient will face in a year. The severity of a patient's condition is measured through [MSD-UPDR](https://www.parkinsons.org.uk/professionals/resources/mds-unified-parkinsons-disease-rating-scale-mds-updrs) scores, which assess both motor and non-motor symptoms associated with Parkinson's. We chose to focus on one of these scores: UPDRS-3, which measures motor symptoms including speech, facial expression, and hand movement.
 
 ### Data Sample
-![Figure 1](./images/Figure%201.png "Example X dataset")
-![Figure 2](./images/Figure%202.png "Example y dataset")
 
-Figure 1: This represents the distribution of the 50 features chosen using SelectKBest feature selection, after scaling and transforming.
-Figure 2: Shows the expected score for UPDRS, after 12 months from the visit_id index.
+Our model uses 50 input features from our protein abundance data in `train_proteins.csv` and outputs a prediction for the patient's UPDRS-3 score in year. These 50 features were chosen using scikit learn's `SelectKBest` feature selection class after being scaled and transformed.
+
+Figure 1: The distribution of the model's 50 input features  
+
+![Figure 1](./images/Figure%201.png "Example X dataset")
+
+
+Figure 2: The expected score for a patient's UPDRS-3 score, 12 months after their visit. Note that `visit_id` is structured as `[patient_id]_[months_since_first_visit]`.
+
+![Figure 2](./images/Figure%202.png "Example y dataset")
 
 ### Getting Started 
 
