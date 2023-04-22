@@ -12,7 +12,10 @@ Using protein abundance data, our model predicts the severity of the symptoms a 
 
 ### Data Sample
 
-Our model uses 50 input features from our protein abundance data in `train_proteins.csv` and outputs a prediction for the patient's UPDRS-3 score in year. These 50 features were chosen using scikit learn's `SelectKBest` feature selection class after being scaled and transformed.
+Our model uses 50 input features from our protein abundance data in `train_proteins.csv` and outputs a prediction for the patient's UPDRS-3 score in year. 
+
+These 50 features were chosen from 288 potential features using scikit learn's `SelectKBest` feature selection class after being scaled and transformed. They comprise of the abundance of 49 proteins and the patient's visit month.
+
 
 Figure 1: The distribution of the model's 50 input features  
 
